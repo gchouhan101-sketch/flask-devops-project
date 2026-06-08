@@ -1,24 +1,38 @@
 pipeline {
-    agent any
+agent any
 
-    stages {
+```
+environment {
+    IMAGE_NAME = "girjesh111/flask-devops:v1"
+}
 
-        stage('Build Docker Image') {
-            steps {
-                sh 'docker build -t flask-devops:v1 .'
-            }
-        }
+stages {
 
-        stage('Remove Old Container') {
-            steps {
-                sh 'docker rm -f flask-app || true'
-            }
-        }
-
-        stage('Run Container') {
-            steps {
-                sh 'docker run -d -p 5000:5000 --name flask-app flask-devops:v1'
-            }
+    stage('Build Docker Image') {
+        steps {
+            sh 'docker build -t $IMAGE_NAME .'
         }
     }
+
+    stage('Push Docker Image') {
+        steps {
+            sh 'docker push $IMAGE_NAME'
+        }
+    }
+
+    stage('Deploy To Kubernetes') {
+        steps {
+            sh 'kubectl apply -f k8s/'
+        }
+    }
+
+    stage('Verify Deployment') {
+        steps {
+            sh 'kubectl get pods'
+            sh 'kubectl get svc'
+        }
+    }
+}
+```
+
 }
