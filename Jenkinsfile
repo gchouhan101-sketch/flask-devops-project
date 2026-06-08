@@ -1,7 +1,7 @@
 pipeline {
 agent any
 
-```
+
 environment {
     IMAGE_NAME = "girjesh111/flask-devops:v1"
 }
@@ -33,6 +33,6 @@ stages {
         }
     }
 }
-```
+
 
 }
